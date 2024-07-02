@@ -1,13 +1,16 @@
----@param font { string: boolean[][] }
+---@param font { string: integer[][] }
 ---@param text string
 ---@param x integer
 ---@param y integer
 ---@param w integer
 ---@param lineSpacing integer?
-function drawText(font, text, x, y, w, lineSpacing) 
+---@param charSpacing integer?
+function drawText(font, text, x, y, w, lineSpacing, charSpacing) 
     lineSpacing = lineSpacing or 4
+    charSpacing = charSpacing or 1
 
-    local breakOn = {" "}
+    local breakOn = {" ", "-"}
+    local consumable = {" "}
 
     ---@type { text: string, width: integer }[]
     local words = {}
@@ -43,7 +46,7 @@ function drawText(font, text, x, y, w, lineSpacing)
                 error("Character '" .. char .. "' not defined in font")
             end
 
-            width = width + #font[char][0]
+            width = width + #font[char][1]
         end
 
         words[i].width = width
@@ -56,23 +59,89 @@ function drawText(font, text, x, y, w, lineSpacing)
     local cursorY = 0
 
     for _, word in ipairs(words) do
+        local consume = false
+
         if cursorX + word.width > w and cursorX ~= 0 then
             cursorY = cursorY + fontHeight + lineSpacing
             cursorX = 0
-        end
 
-        for i = 1, #word.text do
-            local char = word.text:sub(i, i)
-
-            for y = 1, #font[char] do
-                for x = 1, #font[char][y] do
-                    if font[char][y][x] then
-                       gfx.drawPixel(cursorX + x - 1, cursorY + y - 1)
-                    end
+            for _, consumableChar in ipairs(consumable) do
+                if consumableChar == word.text then
+                    consume = true
+                    break
                 end
             end
+        end
 
-            cursorX = cursorX + #font[char][0]
+
+        if not consume then
+            for i = 1, #word.text do
+                local char = word.text:sub(i, i)
+
+                for ry = 1, #font[char] do
+                    for rx = 1, #font[char][ry] do
+                        if font[char][ry][rx] ~= 0 then
+                            gfx.drawPixel(cursorX + rx + x - 1, cursorY + ry + y - 1)
+                        end
+                    end
+                end
+
+                cursorX = cursorX + #font[char][1] + charSpacing
+            end
         end
     end
 end
+
+-- local font = {
+--     ["a"] = {
+--         {0,1,1,1,0},
+--         {0,0,0,0,1},
+--         {0,0,0,0,1},
+--         {0,1,1,1,1},
+--         {1,0,0,0,1},
+--         {1,0,0,0,1},
+--         {0,1,1,1,0},
+--     },
+--     ["b"] = {
+--         {1,0,0,0},
+--         {1,0,0,0},
+--         {1,0,0,0},
+--         {1,1,1,0},
+--         {1,0,0,1},
+--         {1,0,0,1},
+--         {1,1,1,0},
+--     },
+--     ["E"] = {
+--         {1,1,1,1,1,1,1,1},
+--         {1,0,0,0,0,0,0,0},
+--         {1,0,0,0,0,0,0,0},
+--         {1,1,1,1,1,1,1,1},
+--         {1,0,0,0,0,0,0,0},
+--         {1,0,0,0,0,0,0,0},
+--         {1,1,1,1,1,1,1,1},
+--     },
+--     ["-"] = {
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {1,1,1,1,1},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0}
+--     },
+--     [" "] = {
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0},
+--         {0,0,0,0,0}
+--     },
+--
+-- }
+
+-- event.register(event.TICK, function ()
+--     gfx.drawLine(50+40, 50, 50+40, 300, 255, 0, 0)
+--    drawText(font, "aabab ababba ababa   EaE   ababababaab abab ab   ababababababababababa-baba abab abab ab", 50, 50, 40) 
+-- end)
