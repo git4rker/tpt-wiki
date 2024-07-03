@@ -165,7 +165,7 @@ browser.window:addComponent(browser.searchButton)
 
 local function renderBrowserGFX()
   -- gfx.setClipRect(browser.textView.x, browser.textView.y, browser.textView.width, browser.textView.height)
-  gfx.drawText(browser.textView.x, browser.textView.y, browser.textView.text)
+  -- gfx.drawText(browser.textView.x, browser.textView.y, browser.textView.text)
 end
 
 local function openBrowser()
@@ -189,3 +189,4 @@ browser.window:onDraw(renderBrowserGFX)
 browser.searchButton:action(function()
   browser.textView.text = "Loading..."
 end)
+
