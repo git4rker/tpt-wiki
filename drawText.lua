@@ -1,3 +1,5 @@
+require("./utils")
+
 ---@param font { string: integer[][] }
 ---@param text string
 ---@param x integer
@@ -19,20 +21,17 @@ function drawText(font, text, x, y, w, lineSpacing, charSpacing)
   for i = 1, #text do
     local char = text:sub(i, i)
 
-    for _, breakChar in ipairs(breakOn) do
-      if char == breakChar or i == #text then
-        if #wordBuffer > 0 then
-          table.insert(words, { text = wordBuffer })
-          wordBuffer = ""
-        end
-
-        table.insert(words, { text = char })
-        goto continue
+    if includes(breakOn, char) or i == #text then
+      if #wordBuffer > 0 then
+        table.insert(words, { text = wordBuffer })
+        wordBuffer = ""
       end
+
+      table.insert(words, { text = char })
+    else
+      wordBuffer = wordBuffer .. char
     end
 
-    wordBuffer = wordBuffer .. char
-    ::continue::
   end
 
 
@@ -65,11 +64,8 @@ function drawText(font, text, x, y, w, lineSpacing, charSpacing)
       cursorY = cursorY + fontHeight + lineSpacing
       cursorX = 0
 
-      for _, consumableChar in ipairs(consumable) do
-        if consumableChar == word.text then
-          consume = true
-          break
-        end
+      if includes(consumable, word.text) then
+        consume = true
       end
     end
 
