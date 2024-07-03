@@ -8,7 +8,7 @@ if len(sys.argv) < 4:
 char_width = int(sys.argv[2])
 char_height = int(sys.argv[3])
 
-code = "font = {\n"
+code = "local font = {\n"
 
 with Image.open(sys.argv[1], ) as fmap_img:
     fmap_img = fmap_img.convert("1")
@@ -30,6 +30,6 @@ with Image.open(sys.argv[1], ) as fmap_img:
 
         code += "  },\n"
 
-code += "}"
+code += "}\nreturn font"
 
 print(code)

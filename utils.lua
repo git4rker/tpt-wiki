@@ -1,3 +1,5 @@
+local utils = {}
+
 --[[
 Nonblocking GET fetcher
 ]]
@@ -30,7 +32,7 @@ local function updateFetchTasks()
   end
 end
 
-local function fetch(uri, callback)
+function utils.fetch(uri, callback)
   table.insert(fetchTasks, {
     request = http.get(uri),
     callback = callback,
@@ -40,11 +42,10 @@ end
 
 event.register(event.TICK, updateFetchTasks)
 
-
 --[[
 Helper function for finding the first element in a table/array.
 ]]
-local function first(t)
+function utils.first(t)
   local keys = {}
   for k,_ in pairs(t) do
     table.insert(keys, k)
@@ -55,7 +56,7 @@ local function first(t)
   return t[keys[1]]
 end
 
-function includes(t, element)
+function utils.includes(t, element)
   for _, e in ipairs(t) do
     if element == e then
       return true
@@ -64,3 +65,5 @@ function includes(t, element)
   
   return false
 end
+
+return utils

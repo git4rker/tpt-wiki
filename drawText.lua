@@ -1,4 +1,4 @@
-require("./utils")
+local utils = require("./utils")
 
 ---@param font { string: integer[][] }
 ---@param text string
@@ -7,7 +7,7 @@ require("./utils")
 ---@param w integer
 ---@param lineSpacing integer?
 ---@param charSpacing integer?
-function drawText(font, text, x, y, w, lineSpacing, charSpacing) 
+local function drawText(font, text, x, y, w, lineSpacing, charSpacing) 
   lineSpacing = lineSpacing or 4
   charSpacing = charSpacing or 1
 
@@ -21,7 +21,7 @@ function drawText(font, text, x, y, w, lineSpacing, charSpacing)
   for i = 1, #text do
     local char = text:sub(i, i)
 
-    if includes(breakOn, char) or i == #text then
+    if utils.includes(breakOn, char) or i == #text then
       if #wordBuffer > 0 then
         table.insert(words, { text = wordBuffer })
         wordBuffer = ""
@@ -64,7 +64,7 @@ function drawText(font, text, x, y, w, lineSpacing, charSpacing)
       cursorY = cursorY + fontHeight + lineSpacing
       cursorX = 0
 
-      if includes(consumable, word.text) then
+      if utils.includes(consumable, word.text) then
         consume = true
       end
     end
@@ -92,3 +92,5 @@ end
 --   gfx.drawLine(50+150, 50, 50+150, 300, 255, 0, 0)
 --   drawText(font, "Eheheh! Ith worketh! (Kris Get The Banana) Meow meow meow meow!", 50, 50, 150)
 -- end)
+
+return drawText

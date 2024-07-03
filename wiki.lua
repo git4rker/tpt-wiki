@@ -1,3 +1,8 @@
+local font = require("./font")
+local json = require("./json")
+local utils = require("./utils")
+local drawText = require("./drawText")
+
 -- fetch("https://powdertoy.co.uk/Wiki/api.php?action=query&format=json&rvprop=content&prop=revisions&titles=Element:DUST", function(content, status, headers)
 --     local parsed = json.parse(content)
 --     print(first(first(parsed["query"]["pages"])["revisions"])["*"])
