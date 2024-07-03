@@ -92,7 +92,7 @@ function drawText(font, text, x, y, w, lineSpacing, charSpacing)
   end
 end
 
-event.register(event.TICK, function ()
-  gfx.drawLine(50+150, 50, 50+150, 300, 255, 0, 0)
-  drawText(font, "Eheheh! Ith worketh! (Kris Get The Banana) Meow meow meow meow!", 50, 50, 150)
-end)
+-- event.register(event.TICK, function ()
+--   gfx.drawLine(50+150, 50, 50+150, 300, 255, 0, 0)
+--   drawText(font, "Eheheh! Ith worketh! (Kris Get The Banana) Meow meow meow meow!", 50, 50, 150)
+-- end)
