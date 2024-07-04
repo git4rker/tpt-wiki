@@ -1,3 +1,5 @@
+local textEngine = {}
+
 local utils = require("./utils")
 
 ---@param font { string: integer[][] }
@@ -7,7 +9,7 @@ local utils = require("./utils")
 ---@param w integer
 ---@param lineSpacing integer?
 ---@param charSpacing integer?
-local function drawText(font, text, x, y, w, lineSpacing, charSpacing) 
+function textEngine.drawText(font, text, x, y, w, lineSpacing, charSpacing) 
   lineSpacing = lineSpacing or 4
   charSpacing = charSpacing or 1
 
@@ -93,4 +95,4 @@ end
 --   drawText(font, "Eheheh! Ith worketh! (Kris Get The Banana) Meow meow meow meow!", 50, 50, 150)
 -- end)
 
-return drawText
+return textEngine

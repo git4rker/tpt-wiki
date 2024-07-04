@@ -1,12 +1,8 @@
-local font = require("./font")
+local fonts = require("./fonts")
 local json = require("./json")
 local utils = require("./utils")
-local drawText = require("./drawText")
-
--- fetch("https://powdertoy.co.uk/Wiki/api.php?action=query&format=json&rvprop=content&prop=revisions&titles=Element:DUST", function(content, status, headers)
---     local parsed = json.parse(content)
---     print(first(first(parsed["query"]["pages"])["revisions"])["*"])
--- end)
+local fetch = require("./fetch")
+local textEngine = require("./textEngine")
 
 local browser = {}
 
@@ -32,6 +28,7 @@ browser.window:addComponent(browser.searchButton)
 local function renderBrowserGFX()
   -- gfx.setClipRect(browser.textView.x, browser.textView.y, browser.textView.width, browser.textView.height)
   -- gfx.drawText(browser.textView.x, browser.textView.y, browser.textView.text)
+  textEngine.drawText(fonts.terminus, browser.textView.text, browser.textView.x, browser.textView.y, browser.textView.width)
 end
 
 local function openBrowser()
@@ -54,5 +51,16 @@ browser.window:onTryExit(closeBrowser)
 browser.window:onDraw(renderBrowserGFX)
 browser.searchButton:action(function()
   browser.textView.text = "Loading..."
-end)
 
+  fetch.fetch("https://powdertoy.co.uk/Wiki/api.php?action=query&format=json&rvprop=content&prop=revisions&titles=" .. browser.searchBar:text(),
+    function(content, status, headers)
+      local parsed = json.parse(content)
+      local wikitext = utils.first(utils.first(parsed["query"]["pages"])["revisions"])["*"]
+
+      print(wikitext)
+      browser.textView.text = wikitext
+
+      renderBrowserGFX()
+    end
+  )
+end)

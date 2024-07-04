@@ -1,4 +1,6 @@
-local font = {
+local fonts = {}
+
+fonts.terminus = {
     [32] = {
       {0,0,0,0,0,0,},
       {0,0,0,0,0,0,},
@@ -1426,4 +1428,4 @@ local font = {
     },
   }
   
-return font
+return fonts
