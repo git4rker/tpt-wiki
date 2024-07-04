@@ -2,14 +2,14 @@ local fonts = require("./fonts")
 local json = require("./json")
 local utils = require("./utils")
 local fetch = require("./fetch")
-local textEngine = require("./textEngine")
+local textEngine = require("./texteng/textEngine")
 
 local browser = {}
 
 browser.window = ui.window(-1, -1, 500, 300)
 browser.open = false
 browser.width, browser.height = browser.window:size()
-browser.wGap = (gfx.WIDTH - browser.width) / 2 -- gap between the master window border and browser
+browser.wGap = (gfx.WIDTH - browser.width) / 2 -- gap between the game window border and browser
 browser.hGap = (gfx.HEIGHT - browser.height) / 2 -- same for height
 
 browser.searchBar = ui.textbox(5, 5, browser.width - 30, 15, nil, "[search]")

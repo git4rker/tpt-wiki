@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import re
+import os
 
 # No support for scripts in directories yet, you do it git4rker or smth
 def processFile(path, imported = []):
@@ -16,7 +17,7 @@ def processFile(path, imported = []):
                     r"^local " + re.escape(moduleName) + r" = require\([\"']" + re.escape(modulePath) + r"[\"']\)",
                     "--ignoring " + moduleName + " reimport ",
                     content,
-                    flags=re.MULTILINE 
+                    flags=re.MULTILINE
                 )
                 continue
 
@@ -24,7 +25,7 @@ def processFile(path, imported = []):
 
             content = re.sub(
                 r"^local " + re.escape(moduleName) + r" = require\([\"']" + re.escape(modulePath) + r"[\"']\)",
-                "--#region " + moduleName + "\n" + processFile(modulePath + ".lua", imported).replace("\\", "\\\\"),
+                "--#region " + moduleName + "\n" + processFile(os.path.join(os.path.dirname(path), modulePath + ".lua"), imported).replace("\\", "\\\\"),
                 content,
                 flags=re.MULTILINE 
             )
@@ -36,4 +37,4 @@ def processFile(path, imported = []):
 
 
 with open("./PowderWiki.lua", "w") as file:
-    file.write(processFile("./wiki.lua"))
+    file.write(processFile("./src/wiki.lua"))
