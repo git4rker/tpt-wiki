@@ -2,7 +2,7 @@ local fonts = require("./fonts")
 local json = require("./json")
 local utils = require("./utils")
 local fetch = require("./fetch")
-local textEngine = require("./texteng/textEngine")
+local textEngine = require("./textEngine")
 
 local browser = {}
 

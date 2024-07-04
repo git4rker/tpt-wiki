@@ -2,8 +2,11 @@
 
 import re
 import os
+import sys
 
-# No support for scripts in directories yet, you do it git4rker or smth
+in_path = sys.argv[1] if len(sys.argv) >= 2 else "./src/wiki.lua"
+out_path = sys.argv[2] if len(sys.argv) >= 3 else "PowderWiki.lua"
+
 def processFile(path, imported = []):
     regex = r"^local (.+) = require\([\"'](.*)[\"']\)"
 
@@ -36,5 +39,5 @@ def processFile(path, imported = []):
     return content
 
 
-with open("./PowderWiki.lua", "w") as file:
-    file.write(processFile("./src/wiki.lua"))
+with open(out_path, "w") as file:
+    file.write(processFile(in_path))
