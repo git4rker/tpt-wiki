@@ -7,9 +7,11 @@ local utils = require("./utils")
 ---@param x integer
 ---@param y integer
 ---@param w integer
+---@param fontSize 1|2|3?
 ---@param lineSpacing integer?
 ---@param charSpacing integer?
-function textEngine.drawText(font, text, x, y, w, lineSpacing, charSpacing) 
+function textEngine.drawText(font, text, x, y, w, fontSize, lineSpacing, charSpacing) 
+  fontSize = fontSize or 1
   lineSpacing = lineSpacing or 4
   charSpacing = charSpacing or 1
 
@@ -62,8 +64,8 @@ function textEngine.drawText(font, text, x, y, w, lineSpacing, charSpacing)
   for _, word in ipairs(words) do
     local consume = false
 
-    if cursorX + word.width > w and cursorX ~= 0 then
-      cursorY = cursorY + fontHeight + lineSpacing
+    if cursorX + (word.width * fontSize) > w and cursorX ~= 0 then
+      cursorY = cursorY + lineSpacing + fontHeight  * fontSize
       cursorX = 0
 
       if utils.includes(consumable, word.text) then
@@ -79,12 +81,21 @@ function textEngine.drawText(font, text, x, y, w, lineSpacing, charSpacing)
         for ry = 1, #font[charCode] do
           for rx = 1, #font[charCode][ry] do
             if font[charCode][ry][rx] ~= 0 then
-              gfx.drawPixel(cursorX + rx + x - 1, cursorY + ry + y - 1)
+              if fontSize ~= 1 then
+                gfx.fillRect(
+                  cursorX + x + (rx - 1) * fontSize,
+                  cursorY + y + (ry - 1) * fontSize,
+                  fontSize, fontSize
+                )
+              else
+                -- Might be faster who knows
+                gfx.drawPixel(cursorX + rx + x - 1, cursorY + ry + y - 1)
+              end
             end
           end
         end
 
-        cursorX = cursorX + #font[charCode][1] + charSpacing
+        cursorX = cursorX + charSpacing + #font[charCode][1] * fontSize 
       end
     end
   end
